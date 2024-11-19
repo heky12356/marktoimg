@@ -44,3 +44,10 @@ var setHeadLine = true
 var headLineLength = canvaWidth // 实际上会减去fontIndentLeft * 2,左右各留一点空白
 var headLineWidth = 2.0         // 线粗细
 var headLineColor = color.RGBA{R: 211, G: 211, B: 211, A: 255}
+
+// server
+var serverPort = ":8080"
+
+type ImageInput struct {
+	Input string `json:"input"`
+}
