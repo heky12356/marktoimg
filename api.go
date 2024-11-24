@@ -150,15 +150,15 @@ func convertToMarkdown(input string) []string {
 
 	for i, line := range lines {
 		re := regexp.MustCompile(`<([^>]+)>`)
-		// 定义正则表达式，匹配 - [ ] 和 - [x]
-		re2 := regexp.MustCompile(`- \[( |x)\]`)
+		// 定义正则表达式，匹配 - [ ] 和 - [X]
+		re2 := regexp.MustCompile(`- \[( |X)\]`)
 		lines[i] = re.ReplaceAllString(line, `$1`)
 		fmt.Printf("line %d: %s\n", i, lines[i])
 		// 将 - [ ] 和 - [x] 替换为 (未完成) 和 (已完成)
 		lines[i] = re2.ReplaceAllStringFunc(lines[i], func(match string) string {
 			if match == "- [ ]" {
 				return "- checkn"
-			} else if match == "- [x]" {
+			} else if match == "- [X]" {
 				return "- checkx"
 			}
 			return match
