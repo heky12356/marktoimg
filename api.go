@@ -170,7 +170,7 @@ func convertToMarkdown(input string) []string {
 func setimg(input string) {
 	lines := convertToMarkdown(input)
 
-	outputPath := "/img/output.png"
+	outputPath := "img/output.png"
 	// 初始化 Goldmark 并解析 Markdown
 	md := goldmark.New()
 

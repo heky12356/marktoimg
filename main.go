@@ -8,7 +8,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.POST("/api/setimg", getimg)
+	r.POST("/", getimg)
 
-	go r.Run(serverPort)
+	r.Run(serverPort)
 }

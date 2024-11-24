@@ -29,7 +29,7 @@ var fontIndentTop = 100.0
 
 // 画布大小
 var canvaWidth = 1080 * 2
-var canvaHeight = 1920 * 2
+var canvaHeight = 720 * 3
 
 // 行高
 var lineHeight = 70.0
@@ -46,7 +46,7 @@ var headLineWidth = 2.0         // 线粗细
 var headLineColor = color.RGBA{R: 211, G: 211, B: 211, A: 255}
 
 // server
-var serverPort = ":8080"
+var serverPort = ":8000"
 
 type ImageInput struct {
 	Input string `json:"input"`

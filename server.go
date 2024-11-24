@@ -18,7 +18,7 @@ func getimg(c *gin.Context) {
 	setimg(input.Input)
 
 	// 读取生成的图片文件
-	imagePath := "images/output.png"
+	imagePath := "img/output.png"
 	imageData, err := ioutil.ReadFile(imagePath)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to read image"})
@@ -26,7 +26,7 @@ func getimg(c *gin.Context) {
 	}
 
 	// 设置响应头并返回图片数据
-	c.Header("Content-Type", "image/png")
+	c.Header("Content-Type", "img/png")
 	c.Header("Content-Disposition", "inline; filename=output.png")
-	c.Data(http.StatusOK, "image/png", imageData)
+	c.Data(http.StatusOK, "img/png", imageData)
 }
