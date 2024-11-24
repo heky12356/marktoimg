@@ -1,5 +1,5 @@
 # 项目信息
-APP_NAME := synctoqq
+APP_NAME := marktoimg
 SRC_DIR := .
 BUILD_DIR := ./build
 
