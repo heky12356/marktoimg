@@ -191,7 +191,7 @@ func setimg(input string) {
 	}
 
 	// 将logo图片绘制到画布上
-	dc.DrawImage(logo, 0, 400) // 这里的10, 10是logo图片的绘制位置，可以根据需要调整
+	dc.DrawImage(logo, 0, canvaHeight-400) // 这里的10, 10是logo图片的绘制位置，可以根据需要调整
 
 	// 保存为 PNG
 	if err := dc.SavePNG(outputPath); err != nil {
