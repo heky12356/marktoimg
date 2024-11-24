@@ -171,6 +171,7 @@ func setimg(input string) {
 	lines := convertToMarkdown(input)
 
 	outputPath := "img/output.png"
+	logoPath := "logo/io_logo.png" // logo图片路径
 	// 初始化 Goldmark 并解析 Markdown
 	md := goldmark.New()
 
@@ -182,6 +183,15 @@ func setimg(input string) {
 		document := md.Parser().Parse(reader)
 		processNode(document, []byte(line), "0")
 	}
+
+	// 加载logo图片
+	logo, err := gg.LoadImage(logoPath)
+	if err != nil {
+		log.Fatalf("failed to load logo image: %v", err)
+	}
+
+	// 将logo图片绘制到画布上
+	dc.DrawImage(logo, 0, 400) // 这里的10, 10是logo图片的绘制位置，可以根据需要调整
 
 	// 保存为 PNG
 	if err := dc.SavePNG(outputPath); err != nil {

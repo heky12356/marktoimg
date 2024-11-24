@@ -29,7 +29,7 @@ var fontIndentTop = 100.0
 
 // 画布大小
 var canvaWidth = 1080 * 2
-var canvaHeight = 720 * 3
+var canvaHeight = 1080 * 3
 
 // 行高
 var lineHeight = 70.0
