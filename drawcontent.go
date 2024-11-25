@@ -24,19 +24,13 @@ func drawText(text []byte, texttype string) {
 					x += subWidth
 					text = text[i-1:]
 					newLine(texttype)
-
-					// 检查画布高度是否足够
-					if y+lineHeight > float64(dc.Height()) {
-						// 增加画布高度
-						newHeight := dc.Height() + int(3*lineHeight)
-						dc = gg.NewContext(dc.Width(), newHeight)
-					}
-
+					addCanvasHeight()
 					break
 				}
 			}
 		} else {
 			dc.DrawString(string(text), x, y)
+			addCanvasHeight()
 			x += width
 			break
 		}
@@ -148,7 +142,8 @@ func drawHeading(text []byte, level int) {
 	}
 	newLine("0")
 	dc.DrawString(string(text), x, y)
-	drawLine(dc, x, y+20, float64(headLineLength)-x, y+20)
+	addCanvasHeight()
+	drawLine(dc, x, y+float64(margin), float64(headLineLength)-x, y+float64(margin))
 	newLine("0")
 	//切换回正常字体
 	if err := dc.LoadFontFace(nomarlFont, fontSize); err != nil {
@@ -185,5 +180,21 @@ func drawCheckbox(dc *gg.Context, x, y, size float64, checked bool) {
 		dc.DrawLine(t_x+size*0.2, t_y+size*0.5, t_x+size*0.4, t_y+size*0.7)
 		dc.DrawLine(t_x+size*0.4, t_y+size*0.7, t_x+size*0.8, t_y+size*0.3)
 		dc.Stroke()
+	}
+}
+
+// 画布长度自增
+func addCanvasHeight() {
+	// 检查画布高度是否足够
+	if y+lineHeight+float64(logoHeight) > float64(dc.Height()) {
+		// 增加画布高度
+		canvaHeight += int(0.2*float64(canvaHeight)) + logoHeight
+		newDc := initCanvas()
+
+		// 将旧画布的内容复制到新画布上
+		newDc.DrawImage(dc.Image(), 0, 0)
+
+		// 替换旧画布
+		dc = newDc
 	}
 }

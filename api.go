@@ -116,13 +116,18 @@ func processNode(node ast.Node, source []byte, textType string) {
 // }
 
 // 初始化画布
+func imginit() {
+	x = 0.0
+	y = 0.0
+}
 func initCanvas() *gg.Context {
 
 	// 设置画布大小
 	width := canvaWidth
 	height := canvaHeight
 
-	x, y = fontIndentLeft, fontIndentTop
+	x += fontIndentLeft
+	y += fontIndentTop
 	// 创建 gg context
 	dc := gg.NewContext(width, height)
 
@@ -151,7 +156,7 @@ func convertToMarkdown(input string) []string {
 	for i, line := range lines {
 		re := regexp.MustCompile(`<([^>]+)>`)
 		// 定义正则表达式，匹配 - [ ] 和 - [X]
-		re2 := regexp.MustCompile(`- \[( |X)\]`)
+		re2 := regexp.MustCompile(`- \[( |(?i)x)\]`)
 		lines[i] = re.ReplaceAllString(line, `$1`)
 		fmt.Printf("line %d: %s\n", i, lines[i])
 		// 将 - [ ] 和 - [x] 替换为 (未完成) 和 (已完成)
@@ -159,6 +164,8 @@ func convertToMarkdown(input string) []string {
 			if match == "- [ ]" {
 				return "- checkn"
 			} else if match == "- [X]" {
+				return "- checkx"
+			} else if match == "- [x]" {
 				return "- checkx"
 			}
 			return match
@@ -176,6 +183,7 @@ func setimg(input string) {
 	md := goldmark.New()
 
 	// 初始化画布
+	imginit()
 	dc = initCanvas()
 	// 递归处理节点
 	for _, line := range lines {
@@ -191,7 +199,7 @@ func setimg(input string) {
 	}
 
 	// 将logo图片绘制到画布上
-	dc.DrawImage(logo, 0, canvaHeight-400) // 这里的10, 10是logo图片的绘制位置，可以根据需要调整
+	dc.DrawImage(logo, 0, canvaHeight-logoHeight-100) //
 
 	// 保存为 PNG
 	if err := dc.SavePNG(outputPath); err != nil {
