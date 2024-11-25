@@ -11,7 +11,7 @@ var dc *gg.Context
 var x, y float64
 
 // 字体大小
-var fontSize = 60.0
+var fontSize = 100.0
 var quoteFontSize = 40.0
 var listFontSize = 50.0
 var headingFontSizemap = map[int]float64{

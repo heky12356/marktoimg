@@ -24,6 +24,14 @@ func drawText(text []byte, texttype string) {
 					x += subWidth
 					text = text[i-1:]
 					newLine(texttype)
+
+					// 检查画布高度是否足够
+					if y+lineHeight > float64(dc.Height()) {
+						// 增加画布高度
+						newHeight := dc.Height() + int(3*lineHeight)
+						dc = gg.NewContext(dc.Width(), newHeight)
+					}
+
 					break
 				}
 			}
