@@ -17,89 +17,80 @@ import (
 // 递归处理节点及其子节点
 func processNode(node ast.Node, source []byte, textType string) {
 	for child := node.FirstChild(); child != nil; child = child.NextSibling() {
-		switch n := child.(type) {
-		case *ast.Text: // 普通文本
-			fmt.Printf("Text: ")
-			text := n.Segment.Value(source)
-			switch textType {
-			case "bold":
-				fmt.Printf("bold : %s", text)
-				drawBold(text)
-			case "italic":
-				fmt.Printf("italic : %s", n.Segment.Value(source))
-				drawItalic(text)
-			case "listItem":
-				fmt.Printf("listItem : %s", n.Segment.Value(source))
-				drawList(text)
-			case "quote":
-				fmt.Printf("quote : %s", n.Segment.Value(source))
-				drawquote(text)
-			case "h1":
-				fmt.Printf("h1 : %s", n.Segment.Value(source))
-				drawHeading(text, 1)
-			case "h2":
-				fmt.Printf("h2 : %s", n.Segment.Value(source))
-				drawHeading(text, 2)
-			case "h3":
-				fmt.Printf("h3 : %s", n.Segment.Value(source))
-				drawHeading(text, 3)
-			case "h4":
-				fmt.Printf("h4 : %s", n.Segment.Value(source))
-				drawHeading(text, 4)
-			case "h5":
-				fmt.Printf("h5 : %s", n.Segment.Value(source))
-				drawHeading(text, 5)
-			case "h6":
-				fmt.Printf("h6 : %s", n.Segment.Value(source))
-				drawHeading(text, 6)
-			default:
-				fmt.Printf(textType+"：%s", n.Segment.Value(source))
-				drawText(text, "0")
-			}
-		case *ast.Heading:
-			fmt.Printf("\n")
-			newLine("0")
-			htype := "h" + strconv.Itoa(int(n.Level))
-			processNode(n, source, htype) // 递归处理子节点
+		processNodeByType(child, source, textType)
+	}
+}
 
-		case *ast.Emphasis:
-			if n.Level == 2 {
-				fmt.Print("Bold Text: ")
-				processNode(n, source, "bold") // 递归处理子节点
-			} else if n.Level == 1 { // 斜体文本
-				fmt.Print("Italic Text: ")
-				processNode(n, source, "italic") // 递归处理子节点
-			}
-		case *ast.ListItem:
-			fmt.Printf("ListItem: ")
-			fmt.Printf("\n")
-			newLine("0")
-			processNode(n, source, "listItem") // 递归处理子节点
-		case *ast.Link: // 链接
-			fmt.Print("Link: ")
-			processNode(n, source, "link") // 递归处理子节点
-		case *ast.AutoLink:
-			fmt.Printf("AutoLink:")
-			processNode(n, source, "Link")
-		case *ast.Blockquote: // 引用
-			fmt.Printf("Blockquote: ")
-			processNode(n, source, "quotep") // 递归处理子节点
-		case *ast.Paragraph: // 段落
-			newLine("0")
-			fmt.Printf("Paragraph: ")
-			if textType == "quotep" {
-				processNode(n, source, "quote") // 递归处理子节点
-			} else {
-				processNode(n, source, "0") // 递归处理子节点
-			}
-		default:
-			fmt.Printf("Node Type: %T\n", n)
-			if _, ok := n.(*ast.TextBlock); !ok {
-				fmt.Printf("\n")
-				//newLine()
-			}
-			processNode(child, source, textType) // 递归处理子节点
+func processNodeByType(node ast.Node, source []byte, textType string) {
+	switch n := node.(type) {
+	case *ast.Text:
+		processText(n, source, textType)
+	case *ast.Heading:
+		fmt.Printf("\n")
+		newLine("0")
+		headingType := "h" + strconv.Itoa(int(n.Level))
+		processNode(n, source, headingType)
+	case *ast.Emphasis:
+		if n.Level == 2 {
+			fmt.Print("Bold Text: ")
+			processNode(n, source, "bold")
+		} else if n.Level == 1 {
+			fmt.Print("Italic Text: ")
+			processNode(n, source, "italic")
 		}
+	case *ast.ListItem:
+		fmt.Printf("ListItem: \n")
+		newLine("0")
+		Listintend()
+		processNode(n, source, "listItem")
+	case *ast.Link:
+		fmt.Print("Link: ")
+		processNode(n, source, "link")
+	case *ast.AutoLink:
+		fmt.Printf("AutoLink: ")
+		processNode(n, source, "link")
+	case *ast.Blockquote:
+		fmt.Printf("Blockquote: ")
+		processNode(n, source, "quotep")
+	case *ast.Paragraph:
+		newLine("0")
+		fmt.Printf("Paragraph: ")
+		if textType == "quotep" {
+			processNode(n, source, "quote")
+		} else {
+			processNode(n, source, "0")
+		}
+	default:
+		fmt.Printf("Node Type: %T\n", n)
+		if _, ok := n.(*ast.TextBlock); !ok {
+			fmt.Printf("\n")
+		}
+		processNode(node, source, textType)
+	}
+}
+
+func processText(n *ast.Text, source []byte, textType string) {
+	text := n.Segment.Value(source)
+	switch textType {
+	case "bold":
+		fmt.Printf("bold: %s", text)
+		drawBold(text)
+	case "italic":
+		fmt.Printf("italic: %s", text)
+		drawItalic(text)
+	case "listItem":
+		fmt.Printf("listItem: %s", text)
+		drawList(text)
+	case "quote":
+		fmt.Printf("quote: %s", text)
+		drawquote(text)
+	case "h1", "h2", "h3", "h4", "h5", "h6":
+		level, _ := strconv.Atoi(textType[1:])
+		fmt.Printf("%s: %s", textType, text)
+		drawHeading(text, level)
+	default:
+		fmt.Printf("%s: %s", textType, text)
+		drawText(text, "0")
 	}
 }
 

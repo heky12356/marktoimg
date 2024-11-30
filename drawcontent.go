@@ -48,9 +48,6 @@ func drawBold(text []byte) {
 	if err := dc.LoadFontFace(nomarlFont, fontSize); err != nil {
 		log.Fatalf("failed to load font: %v", err)
 	}
-
-	width, _ := dc.MeasureString(string(text))
-	x += width * 1.1
 }
 
 // 斜体
@@ -64,9 +61,6 @@ func drawItalic(text []byte) {
 	if err := dc.LoadFontFace(nomarlFont, fontSize); err != nil {
 		log.Fatalf("failed to load font: %v", err)
 	}
-
-	width, _ := dc.MeasureString(string(text))
-	x += width * 1.3
 }
 
 // 换行
@@ -102,36 +96,33 @@ func drawquote(text []byte) {
 }
 
 // 列表
+func Listintend() {
+	if err := dc.LoadFontFace(boldFont, listFontSize); err != nil {
+		log.Fatalf("failed to load bold font: %v", err)
+	}
+	dc.DrawString("·", x+fontIndentLeft, y)
+	x += fontIndentLeft * 2
+}
 func drawList(text []byte) {
 	// 通过切换大小来绘制列表
-
 	re2 := regexp.MustCompile(`checkx|checkn`)
 	if re2.Match(text) {
 		// 绘制复选框
-		x += fontIndentLeft
+		coverText(x-fontSize, y-fontSize)
+		x -= fontIndentLeft
 		drawCheckbox(dc, x, y, 30, re2.FindString(string(text)) == "checkx")
 		text = []byte(re2.ReplaceAllString(string(text), ""))
-	} else {
-		if err := dc.LoadFontFace(boldFont, listFontSize); err != nil {
-			log.Fatalf("failed to load bold font: %v", err)
-		}
-
-		dc.DrawString("·", x+fontIndentLeft, y)
-		x += fontIndentLeft * 1.5
+		x += fontIndentLeft
 	}
-
 	if err := dc.LoadFontFace(nomarlFont, listFontSize); err != nil {
 		log.Fatalf("failed to load bold font: %v", err)
 	}
-	x += fontIndentLeft
+	//x += fontIndentLeft
 	drawText(text, "list")
 	//切换回正常字体
 	if err := dc.LoadFontFace(nomarlFont, fontSize); err != nil {
 		log.Fatalf("failed to load font: %v", err)
 	}
-	//计算宽带然后让x+宽度
-	width, _ := dc.MeasureString(string(text))
-	x += width
 }
 
 // 标题
@@ -197,4 +188,15 @@ func addCanvasHeight() {
 		// 替换旧画布
 		dc = newDc
 	}
+}
+
+func coverText(x, y float64) {
+	// 设置颜色为白色
+	dc.SetColor(color.White)
+	// 绘制白色长方形
+	dc.DrawRectangle(x, y, fontSize, fontSize)
+	// 填充长方形
+	dc.Fill()
+	// 恢复颜色
+	dc.SetColor(color.Black)
 }

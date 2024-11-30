@@ -37,7 +37,7 @@ var lineHeight = 80.0
 // 字体路径
 var nomarlFont = "./ttf/STFANGSO.TTF"
 var boldFont = "./ttf/msyhbd.ttc"
-var italicFont = "./ttf/SitkaVF-Italic.ttf"
+var italicFont = "./ttf/SrcMinchoItalMd.2.003.ttf"
 
 // 标题下的横线
 var setHeadLine = true
