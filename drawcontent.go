@@ -22,7 +22,7 @@ func drawText(text []byte, texttype string) {
 					// 绘制当前行可以放下的部分
 					dc.DrawString(string(text[:i-1]), x, y)
 					x += subWidth
-					text = text[i-1:]
+					text = text[i-2:]
 					newLine(texttype)
 					addCanvasHeight()
 					break
@@ -97,6 +97,7 @@ func drawquote(text []byte) {
 
 // 列表
 func Listintend() {
+	x += fontIndentLeft * 0.5
 	if err := dc.LoadFontFace(boldFont, listFontSize); err != nil {
 		log.Fatalf("failed to load bold font: %v", err)
 	}

@@ -21,9 +21,13 @@ build: clean
 	@mkdir -p $(BUILD_DIR)
 	$(foreach os, $(OS_LIST), \
 		$(foreach arch, $(ARCH_LIST), \
-			GOOS=$(os) GOARCH=$(arch) $(GO) build -o $(BUILD_DIR)/$(APP_NAME)-$(os)-$(arch) $(SRC_DIR); \
+			GOOS=$(os) GOARCH=$(arch) $(GO) build \
+				-o $(BUILD_DIR)/$(APP_NAME)-$(os)-$(arch) \
+				-buildvcs=false \
+				$(SRC_DIR); \
 		) \
 	)
+
 
 # 清理生成的二进制文件
 .PHONY: clean
