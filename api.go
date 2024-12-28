@@ -110,7 +110,10 @@ func processText(n *ast.Text, source []byte, textType string) {
 func imginit() {
 	x = 0.0
 	y = 0.0
+	canvaWidth = OriginCanvaWidth
+	canvaHeight = OrifinCanvaHeight
 }
+
 func initCanvas() *gg.Context {
 
 	// 设置画布大小

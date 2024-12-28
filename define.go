@@ -28,8 +28,11 @@ var fontIndentLeft = 30.0
 var fontIndentTop = 100.0
 
 // 画布大小
-var canvaWidth = 1080 * 2
-var canvaHeight = 1080 * 3
+var OriginCanvaWidth = 1080 * 2
+var OrifinCanvaHeight = 1080 * 3
+
+var canvaWidth = OriginCanvaWidth
+var canvaHeight = OrifinCanvaHeight
 
 // 行高
 var lineHeight = 80.0
